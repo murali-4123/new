@@ -1,0 +1,36 @@
+pipeline {
+  agent any
+
+  options {
+    buildDiscarder(logRotator(numToKeepStr: '5'))
+  }
+
+  environment {
+    DEPLOY_CREDS = credentials('Mounika')
+    MULE_VERSION = '4.3.0'
+    BG = "1Platform\\Public\\CI-CD Demo"
+    WORKER = "Micro"
+
+    APPNAME = "wg-ev-mobile-customer-api"
+
+    DEPLOY_BAT = "true"
+  }
+  stages {
+    stage('Prepare bat configuration') {
+      steps {
+        sh "mkdir ~/.anypoint"
+        sh "echo '{' > ~/.anypoint/credentials"
+        sh "echo '\"default\" : {' >> ~/.anypoint/credentials"
+        sh "echo '\"username\" : \"${DEPLOY_CREDS_USR}\",' >> ~/.anypoint/credentials"
+        sh "echo  '\"password\" : \"${DEPLOY_CREDS_PSW}\",' >> ~/.anypoint/credentials"
+        sh "echo '\"organization\" : \"testyantra\",' >> ~/.anypoint/credentials"
+        sh "echo '\"organizationId\" : \"ee5a9cd6-469b-4107-92c2-1bf02aadbba0\",' >> ~/.anypoint/credentials"
+        sh "echo  '\"environment\" : null,' >> ~/.anypoint/credentials"
+        sh "echo '\"host\" : null,' >> ~/.anypoint/credentials"
+        sh "echo '\"token\" : { ' >> ~/.anypoint/credentials"
+        sh "echo '\"token\" : \"df53d687-9c35-4f22-aa7e-65f1f49f1b45\",' >> ~/.anypoint/credentials"
+        sh "echo '\"timestamp\" : 1548478748' >> ~/.anypoint/credentials"
+        sh "echo '}' >> ~/.anypoint/credentials"
+        sh "echo '}}' >>  ~/.anypoint/credentials"
+      }
+    }
